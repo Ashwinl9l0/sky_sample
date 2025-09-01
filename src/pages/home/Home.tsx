@@ -9,10 +9,10 @@ import {
 import ContentCard from "../../components/ContentCard";
 import "./Home.scss";
 import type { ContentItem } from "../contentDetails/constants";
-import axios from "axios";
 import { Box, Grid } from "@mui/material";
 import skyCinima from "../../assets/images/Sky_Cinema_PRIMARY_RGB.png";
 import skyNormal from "../../assets/images/SM.png";
+import apiService from "../../services/ApiService";
 
 const Home: React.FC = () => {
   const [content, setContent] = useState<ContentItem[]>([]);
@@ -53,8 +53,8 @@ const Home: React.FC = () => {
     };
     const fetchContent = async () => {
       try {
-        const response = await axios.get(
-          "https://my-json-server.typicode.com/alb90/aieng-tech-test-assets/data"
+        const response = await apiService.get(
+          "alb90/aieng-tech-test-assets/data"
         );
         const data = await response.data;
         if (data && data?.length > 0) {

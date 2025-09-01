@@ -16,6 +16,7 @@ import skyNormal from "../../assets/images/SM.png";
 import skyGo from "../../assets/images/Sky-Up-Logo.png";
 import skyPeacock from "../../assets/images/Peacock-Logo-PNG.png";
 import skyNow from "../../assets/images/NOW_Logo_Solid_Gradient_131x42mm_RGB-1.png";
+import apiService from "../../services/ApiService";
 
 const ContentDetail: React.FC = () => {
   const { id } = useParams();
@@ -25,10 +26,8 @@ const ContentDetail: React.FC = () => {
   useEffect(() => {
     const fetchContent = async () => {
       try {
-        const response = await fetch(
-          "https://my-json-server.typicode.com/alb90/aieng-tech-test-assets/data"
-        );
-        const data = await response.json();
+        const response = await apiService("alb90/aieng-tech-test-assets/data");
+        const data = response.data;
         const selectedContent = data[parseInt(id || "0")];
         setContent(selectedContent);
       } catch (error) {

@@ -12,7 +12,7 @@ import {
 import { TrendingUp, Group, Bolt, CalendarToday } from "@mui/icons-material";
 import "./Analytics.scss";
 import type { TimeSeriesData } from "./constants";
-import axios from "axios";
+import apiService from "../../services/ApiService";
 
 const Analytics: React.FC = () => {
   const [timeSeriesData, setTimeSeriesData] = useState<TimeSeriesData[]>([]);
@@ -21,8 +21,8 @@ const Analytics: React.FC = () => {
   useEffect(() => {
     const fetchTimeSeriesData = async () => {
       try {
-        const response = await axios.get(
-          "https://my-json-server.typicode.com/alb90/aieng-tech-test-timeseries/data"
+        const response = await apiService.get(
+          "alb90/aieng-tech-test-timeseries/data"
         );
         const data = await response?.data;
 
