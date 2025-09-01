@@ -1,7 +1,10 @@
-import Home from "../pages/home/Home";
-import Analytics from "../pages/analytics/Analytics";
-import ContentDetail from "../pages/contentDetails/ContentDetails";
-import type { JSX } from "react";
+import { lazy, type JSX } from "react";
+
+const Home = lazy(() => import("../pages/home/Home"));
+const Analytics = lazy(() => import("../pages/analytics/Analytics"));
+const ContentDetail = lazy(
+  () => import("../pages/contentDetails/ContentDetails")
+);
 
 export interface AppRoute {
   path: string;
