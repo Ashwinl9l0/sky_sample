@@ -28,7 +28,7 @@ const ContentDetail: React.FC = () => {
       try {
         const response = await apiService("alb90/aieng-tech-test-assets/data");
         const data = response.data;
-        const selectedContent = data[parseInt(id || "0")];
+        const selectedContent = data.find((eachD: any) => eachD.name === id);
         setContent(selectedContent);
       } catch (error) {
         console.error("Error fetching content:", error);

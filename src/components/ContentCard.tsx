@@ -17,9 +17,9 @@ interface ContentCardProps {
   index: number;
 }
 
-const ContentCard: React.FC<ContentCardProps> = ({ content, index }) => {
+const ContentCard: React.FC<ContentCardProps> = ({ content }) => {
   return (
-    <Link to={`/content/${index}`} className="contentCard_card">
+    <Link to={`/content/${content.name}`} className="contentCard_card">
       <div className="contentCard_imageWrapper">
         <img
           src={content.videoImage}
