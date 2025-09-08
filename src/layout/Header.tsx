@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { Search, BarChartOutlined } from "@mui/icons-material";
 import "./Header.scss";
 import logo from "../assets/images/Sky_Master_Brand_Logo_SMALL_RGB.png";
 import { alpha, AppBar, Avatar, Box, InputBase, styled } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { setQuery } from "../redux/slices/searchSlice";
 const SearchW = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -48,11 +50,16 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const AppHeader: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const isActive = (path: string) => location.pathname === path;
   const moveToHome = () => {
     navigate("/");
   };
+  useEffect(() => {
+    if (location.pathname !== "/") {
+      dispatch(setQuery(""));
+    }
+  }, [location.pathname]);
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar component="nav">
@@ -75,15 +82,18 @@ const AppHeader: React.FC = () => {
               <BarChartOutlined />
               <div>Analytics</div>
             </Link>
-            <SearchW>
-              <SearchIconWrapper>
-                <Search />
-              </SearchIconWrapper>
-              <StyledInputBase
-                placeholder="Search…"
-                inputProps={{ "aria-label": "search" }}
-              />
-            </SearchW>
+            {location.pathname === "/" && (
+              <SearchW>
+                <SearchIconWrapper>
+                  <Search />
+                </SearchIconWrapper>
+                <StyledInputBase
+                  placeholder="Search…"
+                  inputProps={{ "aria-label": "search" }}
+                  onChange={(e) => dispatch(setQuery(e.target.value))}
+                />
+              </SearchW>
+            )}
             <div className="header-avatar">
               <Avatar src="/broken-image.jpg" sizes="small" />
             </div>

@@ -93,16 +93,6 @@ const ContentDetail: React.FC = () => {
           }}
         >
           <Box
-            //if its video
-            // component="video"
-            // src={
-            //   "https://uk.imageservice.sky.com/contentid/764b39c2db1bc510VgnVCM1000000b43150a____/BOXART"
-            // }
-            // autoPlay
-            // muted
-            // loop
-            // playsInline
-            // ref={videoRef}
             sx={{
               width: "100%",
               height: "100%",
