@@ -5,9 +5,13 @@
 
 .home_movie_list {
   background: #f4f4f4;
+  z-index: 1;
+  position: absolute;
 }
 .home_list_container {
   padding: 2rem;
+  overflow: hidden;
+
   .genre_header {
     font-size: 24px;
     font-family: var(--font-bold);

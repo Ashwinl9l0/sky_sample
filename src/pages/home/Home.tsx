@@ -15,6 +15,7 @@ import skyNormal from "../../assets/images/SM.png";
 import apiService from "../../services/ApiService";
 import { useSelector } from "react-redux";
 import useDebounce from "../../customHooks/useDebounce";
+import GenreCarouselRow from "../../components/genreCard/GenreCard";
 
 const Home: React.FC = () => {
   const [content, setContent] = useState<ContentItem[]>([]);
@@ -115,7 +116,6 @@ const Home: React.FC = () => {
             sx={{
               position: "sticky",
               top: 0,
-              zIndex: -1,
               height: "500px",
               overflow: "hidden",
             }}
@@ -166,11 +166,11 @@ const Home: React.FC = () => {
             <Box
               sx={{
                 position: "absolute",
-                top: "400px",
+                top: "-140px",
                 width: "100%",
                 height: "140px",
                 background:
-                  "linear-gradient(to bottom, rgba(227, 225, 225, 0) 0%, #f4f4f4 100%)",
+                  "linear-gradient(to bottom, #0075be06 0%, #f4f4f4 100%)",
               }}
             />
           )}
@@ -199,24 +199,10 @@ const Home: React.FC = () => {
               </>
             ) : grouped ? (
               Object.entries(grouped).map((movieContent: any) => (
-                <>
-                  <div className="genre_header">{movieContent[0]}</div>
-                  <Grid container spacing={3}>
-                    {movieContent[1].map((item: any, index: number) => (
-                      <Grid
-                        container
-                        direction="row"
-                        sx={{
-                          justifyContent: "flex-start",
-                          alignItems: "stretch",
-                        }}
-                        size={{ xs: 12, sm: 6, md: 3, lg: 2 }}
-                      >
-                        <ContentCard key={index} content={item} index={index} />
-                      </Grid>
-                    ))}
-                  </Grid>
-                </>
+                <GenreCarouselRow
+                  title={movieContent[0]}
+                  items={movieContent[1]}
+                />
               ))
             ) : (
               <div className="home_empty">

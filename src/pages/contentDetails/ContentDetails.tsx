@@ -17,20 +17,48 @@ import skyGo from "../../assets/images/Sky-Up-Logo.png";
 import skyPeacock from "../../assets/images/Peacock-Logo-PNG.png";
 import skyNow from "../../assets/images/NOW_Logo_Solid_Gradient_131x42mm_RGB-1.png";
 import apiService from "../../services/ApiService";
+import GenreCarouselRow from "../../components/genreCard/GenreCard";
 
 const ContentDetail: React.FC = () => {
   const { id } = useParams();
   const [content, setContent] = useState<ContentItem | null>(null);
+  const [similarContent, setSimilarContent] = useState<any | null>(null);
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    function getSimilarMovies(movies: any, targetName: any): any {
+      // Find the target movie
+      const targetMovie = movies.find(
+        (m: any) =>
+          decodeURIComponent(m.name).toLowerCase() ===
+          decodeURIComponent(targetName).toLowerCase()
+      );
+
+      if (!targetMovie) return [];
+
+      // Get target movie genres
+      const targetGenres = new Set(targetMovie.genre);
+
+      // Filter movies with overlapping genres
+      return movies.filter(
+        (m: any) =>
+          m.name !== targetMovie.name &&
+          m.genre.some((g: any) => targetGenres.has(g))
+      );
+    }
     const fetchContent = async () => {
       try {
         const response = await apiService("alb90/aieng-tech-test-assets/data");
         const data = response.data;
         const selectedContent = data.find((eachD: any) => eachD.name === id);
+        const getSimlMovie = getSimilarMovies(data, id);
+        console.log(getSimlMovie);
+        setSimilarContent(getSimlMovie);
         setContent(selectedContent);
       } catch (error) {
+        setSimilarContent([]);
+        setContent(null);
         console.error("Error fetching content:", error);
       } finally {
         setLoading(false);
@@ -87,7 +115,6 @@ const ContentDetail: React.FC = () => {
           sx={{
             position: "sticky",
             top: 0,
-            zIndex: -1,
             height: "500px",
             overflow: "hidden",
           }}
@@ -103,15 +130,15 @@ const ContentDetail: React.FC = () => {
             }}
           ></Box>
         </Box>
-        <div className="home_movie_list">
+        <div className="contentDetails_movie">
           <Box
             sx={{
               position: "absolute",
-              top: "400px",
+              top: "-140px",
               width: "100%",
               height: "140px",
               background:
-                "linear-gradient(to bottom, rgba(227, 225, 225, 0) 0%, #f4f4f4 100%)",
+                "linear-gradient(to bottom, #0075be06 0%, #f4f4f4 100%)",
             }}
           />
           <div className="contentDetails_hero_text">
@@ -146,16 +173,42 @@ const ContentDetail: React.FC = () => {
                   ))}
                 </div>
               </div>
+              <div style={{ overflow: "hidden" }}>
+                <GenreCarouselRow
+                  title={"Similar Movies"}
+                  items={similarContent}
+                />
+              </div>
             </div>
 
             <div className="sidebar">
-              <div className="card">
+              <div
+                className="card d-flex"
+                style={{
+                  flexDirection: "column",
+                }}
+              >
                 <h3>Overall Performance</h3>
                 <div className="performance">
                   <div className="views_header">Total Views</div>
                   <div className="views_total">
                     {content.totalViews.total.toLocaleString()}
                   </div>
+                </div>
+                <div className="progress_bar d-flex">
+                  {platforms.map((platform, index) => {
+                    const percentage =
+                      (platform.current / content.totalViews.total) * 100;
+                    return (
+                      <div
+                        className={`progress ${platform.color}`}
+                        style={{
+                          width: `${percentage}%`,
+                          borderRadius: "unset",
+                        }}
+                      ></div>
+                    );
+                  })}
                 </div>
               </div>
 

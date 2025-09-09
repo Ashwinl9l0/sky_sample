@@ -2,6 +2,7 @@
   // text-align: center;
   width: 100%;
   font-family: var(--font-regular);
+  background: #f4f4f4;
 }
 body {
   margin: 0px;
@@ -61,4 +62,7 @@ body {
   to {
     transform: rotate(360deg);
   }
+}
+.d-flex {
+  display: flex;
 }
