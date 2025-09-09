@@ -1,5 +1,12 @@
 import { useRef, useState } from "react";
-import { Box, Grid, IconButton, Typography } from "@mui/material";
+import {
+  Box,
+  Grid,
+  IconButton,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import ContentCard from "../ContentCard";
 import "./GenreCard.scss";
@@ -28,6 +35,8 @@ function GenreCarouselRow({ title, items }: Props) {
   const [page, setPage] = useState(0);
   const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
   const cardRef = useRef<HTMLDivElement | null>(null);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // detect mobile
   const handleNext = () => {
     if (page < totalPages - 1) setPage((prev) => prev + 1);
   };
@@ -53,12 +62,14 @@ function GenreCarouselRow({ title, items }: Props) {
             transition: "transform 0.5s ease",
             transform: `translateX(-${page * 60}%)`,
             width: `${
-              (items.length && items.length > ITEMS_PER_PAGE
-                ? items.length / ITEMS_PER_PAGE
-                : 6 / ITEMS_PER_PAGE) * 100
+              isMobile
+                ? "100%"
+                : (items.length && items.length > ITEMS_PER_PAGE
+                    ? items.length / ITEMS_PER_PAGE
+                    : 6 / ITEMS_PER_PAGE) * 100
             }%`,
           }}
-          wrap="nowrap"
+          wrap={isMobile ? "wrap" : "nowrap"}
         >
           {items.map((item: any, index) => (
             <Grid
