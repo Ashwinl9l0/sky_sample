@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import React, { useRef, useState, useMemo, useCallback } from "react";
 import {
   Box,
   Grid,
@@ -10,40 +10,30 @@ import {
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import ContentCard from "../ContentCard";
 import "./GenreCard.scss";
-
-interface Asset {
-  assetImage: string;
-  description: string;
-  duration: number;
-  genre: string[];
-  name: string;
-  prevTotalViews: Record<string, number>;
-  provider: string;
-  totalViews: Record<string, number>;
-  videoImage: string;
-}
-
-interface Props {
-  title: string;
-  items: Asset[];
-}
+import type { GenreCardProps } from "../../types/movies";
 
 const ITEMS_PER_PAGE = 6;
 
-function GenreCarouselRow({ title, items }: Props) {
+const GenreCarouselRow: React.FC<GenreCardProps> = ({ title, items }) => {
   const [hover, setHover] = useState(false);
   const [page, setPage] = useState(0);
-  const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
+  const totalPages = useMemo(
+    () => Math.ceil(items.length / ITEMS_PER_PAGE),
+    [items.length]
+  );
   const cardRef = useRef<HTMLDivElement | null>(null);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // detect mobile
-  const handleNext = () => {
-    if (page < totalPages - 1) setPage((prev) => prev + 1);
-  };
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const handlePrev = () => {
+  const handleNext = useCallback(() => {
+    if (page < totalPages - 1) setPage((prev) => prev + 1);
+  }, [page, totalPages]);
+
+  const handlePrev = useCallback(() => {
     if (page > 0) setPage((prev) => prev - 1);
-  };
+  }, [page]);
+
+  const pagedItems = useMemo(() => items, [items]);
 
   return (
     <div
@@ -51,56 +41,40 @@ function GenreCarouselRow({ title, items }: Props) {
       onMouseLeave={() => setHover(false)}
     >
       <div className="genre_header">{title}</div>
-
-      {/* Carousel container */}
-      {/* <Box sx={{ position: "relative" }}> */}
-      <div style={{ position: "relative" }}>
+      <div className="genre_grid">
         <Grid
           container
           spacing={2}
-          sx={{
-            transition: "transform 0.5s ease",
-            transform: `translateX(-${page * 60}%)`,
-            width: `${
-              isMobile
-                ? "100%"
-                : (items.length && items.length > ITEMS_PER_PAGE
-                    ? items.length / ITEMS_PER_PAGE
-                    : 6 / ITEMS_PER_PAGE) * 100
-            }%`,
-          }}
+          sx={
+            !isMobile
+              ? {
+                  transition: "transform 0.5s ease",
+                  transform: `translateX(-${page * 60}%)`,
+                  width: `${
+                    items.length && items.length > ITEMS_PER_PAGE
+                      ? (items.length / ITEMS_PER_PAGE) * 100
+                      : (6 / ITEMS_PER_PAGE) * 100
+                  }%`,
+                }
+              : {}
+          }
           wrap={isMobile ? "wrap" : "nowrap"}
         >
-          {items.map((item: any, index) => (
+          {pagedItems.map((item: any, index) => (
             <Grid
-              key={index}
+              key={item.name || index}
               container
               direction="row"
-              sx={{
-                justifyContent: "flex-start",
-                alignItems: "stretch",
-              }}
+              className="genre_card_grid"
               size={{ xs: 12, sm: 6, md: 3, lg: 2 }}
               ref={cardRef}
             >
-              <ContentCard content={item} index={index} />
+              <ContentCard content={item} />
             </Grid>
           ))}
         </Grid>
         {page > 0 && hover && (
-          <IconButton
-            onClick={handlePrev}
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: 0,
-              transform: "translateY(-50%)",
-              bgcolor: "rgba(0,0,0,0.6)",
-              color: "white",
-              "&:hover": { bgcolor: "#000000cc" },
-              zIndex: 3,
-            }}
-          >
+          <IconButton className="genre_leftButton" onClick={handlePrev}>
             <ChevronLeft />
           </IconButton>
         )}
@@ -108,16 +82,8 @@ function GenreCarouselRow({ title, items }: Props) {
         {page < totalPages - 1 && hover && (
           <IconButton
             onClick={handleNext}
-            sx={{
-              position: "absolute",
-              top: "50%",
-              right: 0,
-              transform: "translateY(-50%)",
-              bgcolor: "rgba(0,0,0,0.6)",
-              color: "white",
-              "&:hover": { bgcolor: "rgba(0,0,0,0.8)" },
-              zIndex: 3,
-            }}
+            sx={{}}
+            className="genre_rightButton"
           >
             <ChevronRight />
           </IconButton>
@@ -125,33 +91,23 @@ function GenreCarouselRow({ title, items }: Props) {
 
         {page > 0 && hover && (
           <Box
-            sx={{
-              position: "absolute",
-              top: "-1.5rem",
-              left: "-2rem",
+            className="genre_leftFade"
+            style={{
               width: `calc(${cardRef?.current?.offsetWidth}px + 2.3rem)`,
-              height: "calc(3rem + 100%)",
-              background:
-                "linear-gradient(to left, transparent 0%, #f4f4f4 80%, #f4f4f4 100%)",
             }}
           />
         )}
         {page < totalPages - 1 && hover && (
           <Box
-            sx={{
-              position: "absolute",
-              top: "-1.5rem",
-              right: "-2rem",
+            style={{
               width: `calc(${cardRef?.current?.offsetWidth}px + 2.3rem)`,
-              height: "calc(3rem + 100%)",
-              background:
-                "linear-gradient(to right, transparent 0%, #f4f4f4 80%, #f4f4f4 100%)",
             }}
+            className="genre_rightFade"
           />
         )}
       </div>
     </div>
   );
-}
+};
 
-export default GenreCarouselRow;
+export default React.memo(GenreCarouselRow);

@@ -9,7 +9,7 @@ function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+        <div>
           <AppHeader />
           <Suspense fallback={<div>Loading...</div>}>
             <Routes>

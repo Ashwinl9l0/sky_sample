@@ -5,3 +5,59 @@
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
 }
+.genre_card_grid {
+  justify-content: flex-start;
+  align-items: stretch;
+}
+.genre_grid {
+  position: relative;
+  padding: 16px;
+  .genre_leftButton {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    z-index: 3;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+  }
+  .genre_rightButton {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    z-index: 3;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+  }
+  .genre_leftFade {
+    position: absolute;
+    top: -1.5rem;
+    left: -2rem;
+    height: calc(3rem + 100%);
+    background: linear-gradient(
+      to left,
+      transparent 0%,
+      #f4f4f4 80%,
+      #f4f4f4 100%
+    );
+  }
+  .genre_rightFade {
+    position: absolute;
+    top: -1.5rem;
+    right: -2rem;
+    height: calc(3rem + 100%);
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      #f4f4f4 80%,
+      #f4f4f4 100%
+    );
+  }
+}

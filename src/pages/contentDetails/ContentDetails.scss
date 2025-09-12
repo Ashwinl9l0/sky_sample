@@ -1,11 +1,35 @@
 .contentDetails_container {
   margin: 0 auto;
   padding-top: 2.5rem;
+  .contentDetails_container_box {
+    color: "black";
+    min-height: "80vh";
+    .contentDetails_container_header {
+      position: sticky;
+      top: 0;
+      height: 500px;
+      overflow: hidden;
+      .contentDetails_hero_img {
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+      }
+    }
+  }
 }
 .contentDetails_movie {
   background: #f4f4f4;
   z-index: 1;
   position: absolute;
+  .contentDetails_gradient {
+    position: absolute;
+    top: -140px;
+    width: 100%;
+    height: 140px;
+    background: linear-gradient(to bottom, #0075be06 0%, #f4f4f4 100%);
+  }
 }
 .contentDetails_hero_text {
   position: absolute;

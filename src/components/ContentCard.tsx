@@ -1,23 +1,33 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Link } from "react-router";
 
 import "./ContentCard.scss";
-import type { ContentItem } from "../pages/contentDetails/constants";
-import {
-  AccessTime,
-  PlayArrow,
-  TrendingDown,
-  TrendingUp,
-  VisibilityOffOutlined,
-  VisibilityOutlined,
-} from "@mui/icons-material";
+import { AccessTime, PlayArrow, VisibilityOutlined } from "@mui/icons-material";
+import type { Movie } from "../types/movies";
 
 interface ContentCardProps {
-  content: ContentItem;
-  index: number;
+  content: Movie;
 }
 
-const ContentCard: React.FC<ContentCardProps> = ({ content }) => {
+const ContentCard: React.FC<ContentCardProps> = React.memo(({ content }) => {
+  const genreBadges = useMemo(() => {
+    if (!content.genre || content.genre.length === 0) return null;
+    const badges = [];
+    badges.push(
+      <div className="contentCard_genreBadge" key={content.genre[0]}>
+        {content.genre[0]}
+      </div>
+    );
+    if (content.genre.length > 1) {
+      badges.push(
+        <div className="contentCard_genreBadge" key="more">
+          +{content.genre.length - 1}
+        </div>
+      );
+    }
+    return badges;
+  }, [content.genre]);
+
   return (
     <Link to={`/content/${content.name}`} className="contentCard_card">
       <div className="contentCard_imageWrapper">
@@ -29,13 +39,7 @@ const ContentCard: React.FC<ContentCardProps> = ({ content }) => {
         <div className="contentCard_gradientOverlay">
           <div className="contentCard_description">
             {content.description}
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                marginTop: "8px",
-              }}
-            >
+            <div className="contentCard_bottomRow">
               <div className="contentCard_totalView">
                 <VisibilityOutlined style={{ fontSize: 12 }} /> &nbsp;&nbsp;
                 {content?.totalViews?.total}
@@ -48,19 +52,7 @@ const ContentCard: React.FC<ContentCardProps> = ({ content }) => {
             <PlayArrow className="contentCard_playIcon" />
           </div>
         </div>
-        <div className="contentCard_genreBadges">
-          <div className="contentCard_genreBadge">{content.genre[0]}</div>
-          {content?.genre?.length > 2 && content?.genre[1] && (
-            <div className="contentCard_genreBadge">{content.genre[1]}</div>
-          )}
-          {content?.genre?.length - 2 > 0 && (
-            <div className="contentCard_genreBadge">
-              +
-              {content?.genre?.length - 2 > 0 ? content?.genre?.length - 2 : ""}
-            </div>
-          )}
-        </div>
-
+        <div className="contentCard_genreBadges">{genreBadges}</div>
         <div className="contentCard_duration">
           <AccessTime className="contentCard_durationIcon" />
           <span>{Math.floor(content.duration / 60)}m</span>
@@ -68,6 +60,6 @@ const ContentCard: React.FC<ContentCardProps> = ({ content }) => {
       </div>
     </Link>
   );
-};
+});
 
 export default ContentCard;
