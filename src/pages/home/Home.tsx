@@ -15,6 +15,8 @@ import type { RootState } from "../../redux/store";
 const Home: React.FC = () => {
   const [content, setContent] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingHeroDetails, setLoadingHeroDetails] = useState(true);
+
   const [mostWatched, setMostWatched] = useState<Movie | null>(null);
   const [grouped, setGrouped] = useState<Record<string, Movie[]>>({});
   const [searchedMovie, setSearchedMovie] = useState<Movie[]>([]);
@@ -37,6 +39,7 @@ const Home: React.FC = () => {
 
   const groupMoviesByGenre = useCallback(
     (movies: Movie[]): Record<string, Movie[]> => {
+      setLoadingHeroDetails(true);
       const genreMap: Record<string, Movie[]> = {};
       movies.forEach((movie: Movie) => {
         movie.genre.forEach((genre: string) => {
@@ -46,6 +49,8 @@ const Home: React.FC = () => {
           genreMap[genre].push(movie);
         });
       });
+      setLoadingHeroDetails(false);
+
       return genreMap;
     },
     []
@@ -72,6 +77,9 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     const fetchContent = async () => {
+      setLoading(true);
+      setLoadingHeroDetails(true);
+
       try {
         const response = await apiService.get(
           "alb90/aieng-tech-test-assets/data"
@@ -90,6 +98,7 @@ const Home: React.FC = () => {
         setContent([]);
         console.error("Error fetching content:", error);
       } finally {
+        setLoadingHeroDetails(false);
         setLoading(false);
       }
     };
@@ -126,10 +135,10 @@ const Home: React.FC = () => {
     [grouped]
   );
 
-  if (loading) {
+  if (loading || loadingHeroDetails) {
     return (
       <div className="loader">
-        <div className="spinner" />
+        <div className="spinner" role="status"></div>
       </div>
     );
   }

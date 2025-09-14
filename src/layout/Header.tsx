@@ -69,6 +69,7 @@ const AppHeader: React.FC = () => {
               onClick={moveToHome}
               alt="logo"
               className="header_logoIcon"
+              aria-label="logo"
             />
           </div>
           <div className="header_search_Container">
