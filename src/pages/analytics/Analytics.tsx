@@ -50,7 +50,7 @@ const Analytics: React.FC = () => {
   if (loading) {
     return (
       <div className="analytics_loader">
-        <div className="analytics_spinner"></div>
+        <div className="analytics_spinner" role="status"></div>
       </div>
     );
   }

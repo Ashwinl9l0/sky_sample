@@ -37,6 +37,7 @@ const GenreCarouselRow: React.FC<GenreCardProps> = ({ title, items }) => {
 
   return (
     <div
+      aria-label="genere_carousel"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
@@ -74,7 +75,11 @@ const GenreCarouselRow: React.FC<GenreCardProps> = ({ title, items }) => {
           ))}
         </Grid>
         {page > 0 && hover && (
-          <IconButton className="genre_leftButton" onClick={handlePrev}>
+          <IconButton
+            className="genre_leftButton"
+            onClick={handlePrev}
+            aria-label="chevronleft"
+          >
             <ChevronLeft />
           </IconButton>
         )}
@@ -82,8 +87,8 @@ const GenreCarouselRow: React.FC<GenreCardProps> = ({ title, items }) => {
         {page < totalPages - 1 && hover && (
           <IconButton
             onClick={handleNext}
-            sx={{}}
             className="genre_rightButton"
+            aria-label="chevronright"
           >
             <ChevronRight />
           </IconButton>

@@ -208,7 +208,7 @@ const ContentDetail: React.FC = () => {
                   ))}
                 </div>
               </div>
-              <div style={{ overflow: "hidden" }}>
+              <div style={{ overflow: "hidden" }} data-testid="similar-movies">
                 <MemoGenreCarouselRow
                   title={"Similar Movies"}
                   items={similarContent}
